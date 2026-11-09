@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MyGrowth</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:white;font-family:Arial,sans-serif;padding-bottom:85px}
+header{padding:25px 20px 10px}
+header h1{font-size:29px;margin:0}
+header p{color:#9ba8c2}
+main{padding:12px 18px}
+.card{background:#151e32;border:1px solid #26334d;border-radius:17px;padding:19px;margin-bottom:17px}
+h2{font-size:19px;margin-top:0}
+.muted{color:#9ba8c2;font-size:14px;line-height:1.6}
+.progress-info{display:flex;justify-content:space-between;margin:18px 0 10px;color:#c5cde0}
+.progress-bar{height:10px;background:#293650;border-radius:20px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:#8b7cff;transition:.3s}
+.task{display:flex;gap:12px;align-items:center;background:#202c43;padding:15px;border-radius:12px;margin-top:11px}
+.task input{width:19px;height:19px;accent-color:#8b7cff}
+.task.done span{text-decoration:line-through;color:#8290aa}
+button{cursor:pointer}
+.primary{width:100%;padding:14px;background:#8b7cff;color:white;border:0;border-radius:11px;font-weight:bold;margin-top:12px}
+.nav{position:fixed;bottom:0;left:0;width:100%;display:flex;justify-content:space-around;background:#121a2c;border-top:1px solid #293650;padding:12px 3px}
+.nav button{background:none;border:0;color:#9ba8c2;font-size:11px;padding:7px 4px}
+.nav button.active{color:#a99cff}
+.nav span{display:block;font-size:19px;margin-bottom:4px}
+.page{display:none}
+.page.active{display:block}
+.word{background:#202c43;padding:15px;border-radius:12px;margin-top:12px}
+.word strong{color:#b5a9ff;font-size:17px}
+textarea{width:100%;min-height:100px;background:#202c43;color:white;border:1px solid #384660;border-radius:10px;padding:12px;font-size:15px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>MyGrowth</h1>
+<p>Build yourself, one day at a time.</p>
+</header>
+
+<main>
+
+<section class="page active" id="home">
+<div class="card">
+<h2>Today's Progress</h2>
+<p class="muted" id="message">Every small step counts.</p>
+<div class="progress-info">
+<span>Daily completion</span>
+<strong id="percentage">0%</strong>
+</div>
+<div class="progress-bar">
+<div class="progress-fill" id="progress"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Daily Goals</h2>
+<div id="tasks">
+<label class="task"><input type="checkbox" data-task="communication"><span>Communication Practice</span></label>
+<label class="task"><input type="checkbox" data-task="vocabulary"><span>English Vocabulary</span></label>
+<label class="task"><input type="checkbox" data-task="speaking"><span>Speaking Practice</span></label>
+<label class="task"><input type="checkbox" data-task="reflection"><span>Daily Reflection</span></label>
+</div>
+<button class="primary" id="reset">Reset Today's Progress</button>
+</div>
+</section>
+
+<section class="page" id="communication">
+<div class="card">
+<h2>Communication Practice</h2>
+<p class="muted">Practice expressing your thoughts clearly.</p>
+<h3>Today's Speaking Topic</h3>
+<p>Why is communication important in everyday life?</p>
+<p class="muted">Speak for 1–2 minutes. Use complete sentences and explain your reasons.</p>
+<h3>Practice your answer</h3>
+<textarea id="answer" placeholder="Write your answer here..."></textarea>
+<button class="primary" id="saveAnswer">Save Practice</button>
+<p class="muted" id="answerStatus"></p>
+</div>
+</section>
+
+<section class="page" id="vocabulary">
+<div class="card">
+<h2>English Vocabulary</h2>
+<p class="muted">Learn five useful words.</p>
+
+<div class="word">
+<strong>Improve</strong>
+<p>Meaning: To make something better.</p>
+<p class="muted">Example: I want to improve my communication skills.</p>
+</div>
+
+<div class="word">
+<strong>Confident</strong>
+<p>Meaning: Feeling sure about yourself.</p>
+<p class="muted">Example: I want to become a confident speaker.</p>
+</div>
+
+<div class="word">
+<strong>Express</strong>
+<p>Meaning: To communicate an idea or feeling.</p>
+<p class="muted">Example: I can express my thoughts clearly.</p>
+</div>
+
+<div class="word">
+<strong>Consistent</strong>
+<p>Meaning: Doing something regularly.</p>
+<p class="muted">Example: Consistent practice helps me improve.</p>
+</div>
+
+<div class="word">
+<strong>Opportunity</strong>
+<p>Meaning: A chance to do something.</p>
+<p class="muted">Example: Learning creates new opportunities.</p>
+</div>
+</div>
+</section>
+
+<section class="page" id="progressPage">
+<div class="card">
+<h2>Your Progress Report</h2>
+<p class="muted">Today's completed goals</p>
+<h1 id="reportCount">0 / 4</h1>
+<p id="reportMessage" class="muted">Start completing your daily goals.</p>
+<div class="progress-bar">
+<div class="progress-fill" id="reportBar"></div>
+</div>
+</div>
+<div class="card">
+<h2>Your Mission</h2>
+<p class="muted">Build better communication, improve your English vocabulary and become more consistent through daily practice.</p>
+</div>
+</section>
+
+</main>
+
+<nav class="nav">
+<button class="active" data-page="home"><span>⌂</span>Home</button>
+<button data-page="communication"><span>◉</span>Speak</button>
+<button data-page="vocabulary"><span>▤</span>Words</button>
+<button data-page="progressPage"><span>▥</span>Progress</button>
+</nav>
+
+<script>
+const boxes=document.querySelectorAll('[data-task]');
+const today=new Date().toISOString().slice(0,10);
+const key="mygrowth_"+today;
+
+function update(){
+let count=0;
+boxes.forEach(box=>{
+box.checked=localStorage.getItem(key+"_"+box.dataset.task)==="true";
+if(box.checked)count++;
+box.parentElement.classList.toggle("done",box.checked);
+});
+let percent=count*25;
+document.getElementById("percentage").textContent=percent+"%";
+document.getElementById("progress").style.width=percent+"%";
+document.getElementById("message").textContent=count===4?"All daily goals completed!":count+" of 4 goals completed.";
+document.getElementById("reportCount").textContent=count+" / 4";
+document.getElementById("reportBar").style.width=percent+"%";
+document.getElementById("reportMessage").textContent=count===4?"Excellent work!":"Keep practising every day.";
+}
+
+boxes.forEach(box=>{
+box.addEventListener("change",()=>{
+localStorage.setItem(key+"_"+box.dataset.task,box.checked);
+update();
+});
+});
+
+document.getElementById("reset").onclick=()=>{
+boxes.forEach(box=>localStorage.removeItem(key+"_"+box.dataset.task));
+update();
+};
+
+document.querySelectorAll(".nav button").forEach(button=>{
+button.onclick=()=>{
+document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+button.classList.add("active");
+document.getElementById(button.dataset.page).classList.add("active");
+window.scrollTo(0,0);
+};
+});
+
+document.getElementById("saveAnswer").onclick=()=>{
+localStorage.setItem("mygrowth_answer",document.getElementById("answer").value);
+document.getElementById("answerStatus").textContent="Practice saved successfully.";
+};
+
+document.getElementById("answer").value=localStorage.getItem("mygrowth_answer")||"";
+update();
+</script>
+
+</body>
+                                    </html>
