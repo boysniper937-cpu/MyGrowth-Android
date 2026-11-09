@@ -1,12 +1,11 @@
 package com.mygrowth.app
 
+import android.app.Activity
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.activity.ComponentActivity
 
-class MainActivity : ComponentActivity() {
-
+class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -16,7 +15,6 @@ class MainActivity : ComponentActivity() {
         webView.settings.domStorageEnabled = true
 
         webView.loadUrl("file:///android_asset/index.html")
-
         setContentView(webView)
     }
 }
